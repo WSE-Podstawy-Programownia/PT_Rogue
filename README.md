@@ -20,3 +20,10 @@ Przeciwnicy
 >Wykonują ruch na każdy ruch gracza
 >Ataki mają dodatkowe efekty - zamrożenie, trucizna
 
+MVP
+Jest plansza
+da sie poruszac
+na planszy sa wrogowie ktorzy też się ruszają
+2 pokoje połaczone korytarzem
+postac ma 1 statysyke - zycie
+da sie ja zabic
