@@ -20,12 +20,12 @@ namespace Rogue
 {
 	class Game
 	{
-		public static Tile[,] Room;
+		public static Player player = new Player();
+		public static Map map;
 
 		static void Main(string[] args)
 		{
 			OperateMenu();
-
 		}
 
 		private static void OperateMenu() 
@@ -33,60 +33,39 @@ namespace Rogue
 			Console.WriteLine("Welcome to the Rogue Game");
 			Console.WriteLine("1 - Start New Game\n" +
 							  "2 - View Game Information\n" +
-							  "3 - Quit Game);");
+							  "3 - Quit Game");
 
 			if (Console.ReadKey(true).Key == ConsoleKey.D1)
 			{
 				Console.WriteLine("Booting new game");
 
-				Room = GenerateRoomTiles();
+				map = new Map();
+				RunGameLoop();
 
-				DrawMap(Room);
 			}
-
-
 		}
 
-		private static Tile[ , ] GenerateRoomTiles()
+		private static void RunGameLoop()
 		{
-			Tile[,] currentRoom = new Tile[15, 15];
-
-			for (int i = 0; i < currentRoom.GetLength(0); i++)
+			while(true)
 			{
-				for (int j = 0; j < currentRoom.GetLength(1); j++)
-				{
-					if (
-					   i == 0 
-					|| i == currentRoom.GetLength(0) - 1
-					|| j == 0
-					|| j == currentRoom.GetLength(1) - 1
-					   )
-					{
-						currentRoom[i, j] = new Wall(); 
-					} 
-					else
-					{
-						currentRoom[i, j] = new Floor();
-					}
-				}
-			}
+				MovePlayer();
 
-			return currentRoom;
-
+			}	
 		}
 
-		private static void DrawMap(Tile[,] Room)
+		private static void MovePlayer()
 		{
-			for (int i = 0; i < Room.GetLength(0); i++)
-			{ 
-				for (int j = 0; j < Room.GetLength(0); j++)
-				{
-					Console.Write(Room[i, j].Character);
-				}
-				Console.WriteLine();
-			}
+			map.Room[player.Position[0], player.Position[1]] = map.stoodOnTile;
+
+			player.HandlePlayerInput();
+			map.stoodOnTile = map.Room[player.Position[0], player.Position[1]];
+			map.Room[player.Position[0], player.Position[1]] = player;
+			
+			map.DrawMap(map.Room);
+
 		}
-		
+
 
 	}
 }
