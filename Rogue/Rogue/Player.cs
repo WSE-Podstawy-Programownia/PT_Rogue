@@ -6,17 +6,24 @@ using System.Threading.Tasks;
 
 namespace Rogue
 {
-	 class Player : Tile
+	 class Player : Tile, IMovable
 	{
+
 		public override char Character { get; set; } = 'P';
 
 		public override bool Walkable { get; } = false;
 
 		public int HealthValue { get; set; } = 15;
 
-		public int[] Position { get; set; } = { 2, 2 };
+		public override int PositionX { get; set; } = 2;
+		public override int PositionY { get; set; } = 2;
 
+		public Tile StoodOnTile { get; set; }
 
+		public Player()
+		{
+			StoodOnTile = new Floor(PositionX, PositionY);
+		}
 
 		public void HandlePlayerInput()
 		{
@@ -24,19 +31,19 @@ namespace Rogue
 
 			if (input.Key == ConsoleKey.LeftArrow)
 			{
-				Position[1] -= 1;
+				PositionX -= 1;
 			}
 			else if (input.Key == ConsoleKey.RightArrow)
 			{
-				Position[1] += 1;
+				PositionX += 1;
 			}
 			else if (input.Key == ConsoleKey.DownArrow)
 			{
-				Position[0] += 1;
+				PositionY += 1;
 			}
 			else if (input.Key == ConsoleKey.UpArrow)
 			{
-				Position[0] -= 1;
+				PositionY -= 1;
 			} else
 			{
 
@@ -44,5 +51,31 @@ namespace Rogue
 
 		}
 
+		public void Move()
+		{
+
+			Game.map.Room[PositionY, PositionX] = StoodOnTile;
+
+			int OldPositionY = PositionY;
+			int OldPositionX = PositionX;
+
+			HandlePlayerInput();
+
+			if (Game.map.Room[PositionY, PositionX].Walkable == false)
+			{
+				PositionY = OldPositionY;
+				PositionX = OldPositionX;
+
+				Game.map.Room[PositionY, PositionX] = this;
+			}
+			else
+			{
+				StoodOnTile = Game.map.Room[PositionY, PositionX];
+				Game.map.Room[PositionY, PositionX] = this;
+			}
+
+			Game.map.DrawMap(Game.map.Room);
+
+		}
 	}
 }

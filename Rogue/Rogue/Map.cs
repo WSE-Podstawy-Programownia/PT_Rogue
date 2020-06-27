@@ -10,7 +10,7 @@ namespace Rogue
 	class Map
 	{
 		public Tile[,] Room;
-		public Tile stoodOnTile = new Floor();
+		
 		
 
 		public Map()
@@ -35,16 +35,16 @@ namespace Rogue
 					|| j == currentRoom.GetLength(1) - 1
 					   )
 					{
-						currentRoom[i, j] = new Wall();
+						currentRoom[i, j] = new Wall(i, j);
 					}
 					else
 					{
-						currentRoom[i, j] = new Floor();
+						currentRoom[i, j] = new Floor(i, j);
 					}
 				}
 			}
 
-			currentRoom[Game.player.Position[0], Game.player.Position[1]] = Game.player;
+			currentRoom[Game.player.PositionY, Game.player.PositionX] = Game.player;
 
 			return currentRoom;
 

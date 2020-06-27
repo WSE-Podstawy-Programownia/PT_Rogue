@@ -49,22 +49,11 @@ namespace Rogue
 		{
 			while(true)
 			{
-				MovePlayer();
+				player.Move();
 
 			}	
 		}
 
-		private static void MovePlayer()
-		{
-			map.Room[player.Position[0], player.Position[1]] = map.stoodOnTile;
-
-			player.HandlePlayerInput();
-			map.stoodOnTile = map.Room[player.Position[0], player.Position[1]];
-			map.Room[player.Position[0], player.Position[1]] = player;
-			
-			map.DrawMap(map.Room);
-
-		}
 
 
 	}

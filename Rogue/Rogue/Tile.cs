@@ -19,5 +19,16 @@ namespace Rogue
 			get;
 		}
 
+		public abstract int PositionY
+		{
+			get;
+			set;
+		}
+		public abstract int PositionX
+		{
+			get;
+			set;
+		}
+
 	}
 }

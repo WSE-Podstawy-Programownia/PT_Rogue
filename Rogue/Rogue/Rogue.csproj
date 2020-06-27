@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Floor.cs" />
+    <Compile Include="IMovable.cs" />
     <Compile Include="Map.cs" />
     <Compile Include="Tile.cs" />
     <Compile Include="Player.cs" />
