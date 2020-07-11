@@ -6,76 +6,101 @@ using System.Threading.Tasks;
 
 namespace Rogue
 {
-	 class Player : Tile, IMovable
+	 class Player : Tile, IMovable, IFightable
 	{
 
+		#region fields
 		public override char Character { get; set; } = 'P';
 
 		public override bool Walkable { get; } = false;
 
-		public int HealthValue { get; set; } = 15;
+		public int HitPoints { get; set; } = 15;
 
 		public override int PositionX { get; set; } = 2;
 		public override int PositionY { get; set; } = 2;
 
 		public Tile StoodOnTile { get; set; }
+		#endregion
+
 
 		public Player()
 		{
 			StoodOnTile = new Floor(PositionX, PositionY);
 		}
 
+		//Player input handles the arrow key inputs and moves or attacks
 		public void HandlePlayerInput()
 		{
 			ConsoleKeyInfo input = Console.ReadKey(true);
 
+			int desiredPositionY = PositionY;
+			int desiredPositionX = PositionX;
+
 			if (input.Key == ConsoleKey.LeftArrow)
 			{
-				PositionX -= 1;
+				desiredPositionX--;
 			}
 			else if (input.Key == ConsoleKey.RightArrow)
 			{
-				PositionX += 1;
+				desiredPositionX++;
 			}
 			else if (input.Key == ConsoleKey.DownArrow)
 			{
-				PositionY += 1;
+				desiredPositionY++;
 			}
 			else if (input.Key == ConsoleKey.UpArrow)
 			{
-				PositionY -= 1;
-			} else
+				desiredPositionY--;
+			} 
+			else
 			{
 
 			}
 
-		}
-
-		public void Move()
-		{
-
-			Game.map.Room[PositionY, PositionX] = StoodOnTile;
-
-			int OldPositionY = PositionY;
-			int OldPositionX = PositionX;
-
-			HandlePlayerInput();
-
-			if (Game.map.Room[PositionY, PositionX].Walkable == false)
+			//If the desired spot is walkable move there if not then await next input
+			if (Game.map.Room[desiredPositionY, desiredPositionX] is IFightable)
 			{
-				PositionY = OldPositionY;
-				PositionX = OldPositionX;
-
-				Game.map.Room[PositionY, PositionX] = this;
+				Attack((IFightable) Game.map.Room[desiredPositionY, desiredPositionX]);
+			}
+			else if (Game.map.Room[desiredPositionY, desiredPositionX].Walkable == true)
+			{
+				Move(desiredPositionY, desiredPositionX);
 			}
 			else
 			{
-				StoodOnTile = Game.map.Room[PositionY, PositionX];
-				Game.map.Room[PositionY, PositionX] = this;
+				HandlePlayerInput();
 			}
 
-			Game.map.DrawMap(Game.map.Room);
 
+		}
+
+
+		//Move the player to a given position, replaces old spot on the map with the StoodOnTile
+		public void Move(int moveToY, int moveToX)
+		{
+			//replace pre-move position Tile on the map
+			Game.map.Room[PositionY, PositionX] = StoodOnTile;
+
+			//Change position to new values and change the Tile on the Map to player
+			PositionY = moveToY;
+			PositionX = moveToX;
+
+			StoodOnTile = Game.map.Room[PositionY, PositionX];
+			Game.map.Room[PositionY, PositionX] = this;
+		}
+
+		public void Attack(IFightable target)
+		{
+			target.HitPoints -= 3;
+			target.EvaluateDeath();
+		}
+
+		public void EvaluateDeath()
+		{
+			if (HitPoints <= 0)
+			{
+				Game.GameOver = true;
+			}
 		}
 	}
 }

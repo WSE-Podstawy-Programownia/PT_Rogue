@@ -6,10 +6,13 @@ using System.Threading.Tasks;
 
 namespace Rogue
 {
-	interface IMovable
+	interface IFightable
 	{
-		Tile StoodOnTile { get; set; }
+		int HitPoints { get; set; }
 
-		void Move(int moveToY, int moveToX);
+		void Attack(IFightable target);
+
+		void EvaluateDeath();
+
 	}
 }

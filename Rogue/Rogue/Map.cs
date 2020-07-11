@@ -45,13 +45,13 @@ namespace Rogue
 			}
 
 			currentRoom[Game.player.PositionY, Game.player.PositionX] = Game.player;
+			currentRoom[5, 5] = new Enemy(5, 5);
+			currentRoom[10, 10] = new Enemy(10, 10);
 
 			return currentRoom;
 
 		}
-
-
-		
+	
 		public void DrawMap(Tile[,] Room)
 		{
 			Console.Clear();

@@ -22,6 +22,9 @@ namespace Rogue
 	{
 		public static Player player = new Player();
 		public static Map map;
+		public static List<Enemy> Enemies = new List<Enemy>();
+
+		public static bool GameOver { get; set; } = false;
 
 		static void Main(string[] args)
 		{
@@ -47,11 +50,19 @@ namespace Rogue
 
 		private static void RunGameLoop()
 		{
-			while(true)
+			while (!GameOver)
 			{
-				player.Move();
+				player.HandlePlayerInput();
 
-			}	
+				foreach (Enemy enemy in Enemies)
+				{
+					enemy.AIBehaviour();
+				}
+
+				map.DrawMap(map.Room);
+			}
+
+			Console.WriteLine("You were defeated. Now the evil Necromancer will rule the world. GAME OVER!");
 		}
 
 
